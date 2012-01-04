@@ -473,8 +473,12 @@ public abstract class SearchAlgorithm {
             Encoding enc = regex.enc;
             byte[]map = regex.map;
             int s = textP;
-
+            boolean isUtf8 = false;
+            if(enc != null && enc.getCharsetName() != null && enc.getCharsetName().equals("UTF-8")) {
+                isUtf8 = true;
+            }
             while (s < textRange) {
+                if (isUtf8 && text[s] < 0) return -1;
                 if (map[text[s] & 0xff] != 0) return s;
                 s += enc.length(text, s, textEnd);
             }
