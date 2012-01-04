@@ -2,6 +2,8 @@ package org.joni;
 
 import org.jcodings.Encoding;
 import org.jcodings.IntHolder;
+import org.joni.exception.ErrorMessages;
+import org.joni.exception.ValueException;
 
 public abstract class SearchAlgorithm {
 
@@ -478,7 +480,9 @@ public abstract class SearchAlgorithm {
                 isUtf8 = true;
             }
             while (s < textRange) {
-                if (isUtf8 && text[s] < 0) return -1;
+                if (isUtf8 && text[s] < 0) {
+                    throw new ValueException(ErrorMessages.ERR_INVALID_UTF);
+                }
                 if (map[text[s] & 0xff] != 0) return s;
                 s += enc.length(text, s, textEnd);
             }
